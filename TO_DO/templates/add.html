@@ -1,0 +1,42 @@
+{% extends "master.html" %}
+{% load static %}
+
+{% block title %}
+Add To Do List
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2 class="form-title">Add Task</h2>
+    <form method="post" action="addtask/" class="task-form">
+        {% csrf_token %}
+        
+        <label>Task</label>
+        <input type="text" name="task" class="input-field" placeholder="Enter task">
+        
+        <label>Due Date</label>
+        <input type="date" name="due_date" class="input-field" min="{{ today|date:'Y-m-d' }}">
+        
+        <label>Category</label>
+        <select name="category" class="input-field">
+            <option value="Work">Work</option>
+            <option value="Study">Study</option>
+            <option value="Personal">Personal</option>
+            <option value="Other" selected>Other</option>
+        </select>
+        
+        <label>Priority</label>
+        <select name="priority" class="input-field">
+            <option value="H">High</option>
+            <option value="M" selected>Medium</option>
+            <option value="L">Low</option>
+        </select>
+        
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-primary">Add Task</button>
+            <a href="{% url 'index' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

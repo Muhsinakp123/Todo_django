@@ -1,0 +1,70 @@
+{% extends "master.html" %}
+{% load static %}
+
+{% block title %}
+To Do List
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="table-container">
+        <h1 class="page-title">My To Do List</h1>
+
+        <button onclick="toggleTheme()" class="theme-btn"><i class="fa-solid fa-palette"></i></button>
+
+        <a href="add/" class="btn btn-primary add-btn">+ Add Task</a>
+        <h6 class="pending-task">Pending Task : {{ false }}</h6>
+
+        <table class="task-table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Task</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Created Date</th>
+                    <th>Due Date</th>
+                    <th>Priority</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for x in tables %}
+                <tr draggable="true" ondragstart="dragit(event)" ondragover="dragover(event)">
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ x.task }}</td>
+                    <td>{{ x.category }}</td>
+                    <td>
+                        {% if x.status %}
+                            <span class="status completed">Completed</span>
+                        {% elif x.due_date|date:"Y-m-d" == today|date:"Y-m-d" %}
+                            <span class="status due-today">Due Today</span>
+                        {% elif x.due_date|date:"Y-m-d" < today|date:"Y-m-d" %}
+                            <span class="status overdue">Overdue</span>
+                        {% else %}
+                            <span class="status pending">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ x.created_at|date:"Y-m-d" }}</td>
+                    <td>{{ x.due_date|date:"Y-m-d" }}</td>
+                    <td>{{ x.get_priority_display }}</td>
+                    <td>
+                        {% if not x.status %}
+                            <a href="status/{{ x.id }}" class="btn btn-success">Mark Done</a>
+                        {% else %}
+                            <span></span>
+                        {% endif %}
+                        <a href="update_task/{{ x.id }}" class="btn btn-warning">Update</a>
+                        <a href="delete_task/{{ x.id }}" onclick="return confirm('Are you sure You Wanted to Delete this task?');" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8">No tasks found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
