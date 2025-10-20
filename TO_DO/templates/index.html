@@ -49,11 +49,6 @@ To Do List
                     <td>{{ x.due_date|date:"Y-m-d" }}</td>
                     <td>{{ x.get_priority_display }}</td>
                     <td>
-                        {% if not x.status %}
-                            <a href="status/{{ x.id }}" class="btn btn-success">Mark Done</a>
-                        {% else %}
-                            <span></span>
-                        {% endif %}
                         <a href="update_task/{{ x.id }}" class="btn btn-warning">Update</a>
                         <a href="delete_task/{{ x.id }}" onclick="return confirm('Are you sure You Wanted to Delete this task?');" class="btn btn-danger">Delete</a>
                     </td>

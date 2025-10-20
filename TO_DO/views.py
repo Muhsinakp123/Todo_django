@@ -1,16 +1,24 @@
 from datetime import date
-
+from django.db.models import Case, When, Value, IntegerField
 from .models import Task
-from django.shortcuts import redirect, render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 
 
-def index (request):
-    tables = Task.objects.all().order_by('priority')
-    false = Task.objects.all().filter(status = False).count()
+def index(request):
+    tables = Task.objects.all().annotate(
+        priority_order=Case(
+            When(priority='H', then=Value(1)),
+            When(priority='M', then=Value(2)),
+            When(priority='L', then=Value(3)),
+            output_field=IntegerField(),
+        )
+    ).order_by('priority_order')
+
+    false = Task.objects.filter(status=False).count()
     today = date.today()
-    return render(request,'index.html',{'tables': tables, 'false': false, 'today':today})
+    return render(request, 'index.html', {'tables': tables, 'false': false, 'today': today})
 
 def add (request):
     return render(request,'add.html',{"today": date.today()})

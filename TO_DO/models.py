@@ -6,9 +6,10 @@ from django.db import models
 class Task(models.Model):
     
     PRIORITY_CHOICES = [
-        ('L', 'Low'),
-        ('M', 'Medium'),
-        ('H', 'High'),
+    ('H', 'High'),
+    ('M', 'Medium'),
+    ('L', 'Low'),
+
     ]
 
     CATEGORY_CHOICES = [
